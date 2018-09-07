@@ -18,7 +18,6 @@ public class StartScreenActivity extends AppCompatActivity {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("CLICKED THIS BUTTON");
                 Intent intent = new Intent(getApplicationContext(), GameScreenActivity.class);
                 startActivity(intent);
             }
