@@ -1,5 +1,6 @@
 package com.example.ac.mp1;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +19,8 @@ public class StartScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("CLICKED THIS BUTTON");
-//                Intent intent = new Intent(this, game_sc)
+                Intent intent = new Intent(getApplicationContext(), GameScreenActivity.class);
+                startActivity(intent);
             }
         });
 
