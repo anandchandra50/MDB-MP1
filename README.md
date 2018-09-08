@@ -3,6 +3,5 @@ First project for MDB (Android).
 
 Task: Create a game that allows users to learn the names of all MDB Members. 
 
-![start screen](https://i.imgur.com/tSkaGhx.jpg)
-![gameplay](https://i.imgur.com/hNaJKcW.jpg)
-
+<img src="https://i.imgur.com/tSkaGhx.jpg" height="1%">
+<img src="https://i.imgur.com/hNaJKcW.jpg" height="1%">
