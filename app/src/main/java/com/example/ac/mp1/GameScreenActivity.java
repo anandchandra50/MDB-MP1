@@ -2,17 +2,23 @@ package com.example.ac.mp1;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.CountDownTimer;
 import android.provider.ContactsContract;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -41,6 +47,8 @@ public class GameScreenActivity extends AppCompatActivity {
     int score = 0; // score
     int index = 0; // cycle through member names, so use index to keep track (no unnecessary repeats)
 
+    Palette.PaletteAsyncListener paletteListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,12 +58,15 @@ public class GameScreenActivity extends AppCompatActivity {
         image = findViewById(R.id.currentImage);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { // add the contact
                 Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
                 intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
                 intent.putExtra(ContactsContract.Intents.Insert.NAME, correctName);
                 startActivity(intent);
 
+                // visual:
+
+                // palette
 
             }
         });
@@ -104,7 +115,18 @@ public class GameScreenActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                selectedIncorrectName("",true); // timer expired
+                selectedIncorrectName(correctName,true); // timer expired
+            }
+        };
+
+        // init palette
+        paletteListener = new Palette.PaletteAsyncListener() {
+            public void onGenerated(Palette palette) {
+                // access palette colors here
+                int defaultColor = 0x000000;
+                int mutedDark = palette.getDarkMutedColor(defaultColor);
+                ConstraintLayout background = findViewById(R.id.background);
+                background.setBackgroundColor(mutedDark);
             }
         };
 
@@ -113,6 +135,8 @@ public class GameScreenActivity extends AppCompatActivity {
 
     }
 
+
+    /// Generates and creates logic for one person
     private void playRound() {
         // shuffle all buttons so not always in same order
         Collections.shuffle(allButtons);
@@ -124,8 +148,13 @@ public class GameScreenActivity extends AppCompatActivity {
         int imageID = getResources().getIdentifier(imageURL, "drawable", getPackageName());
 
         // set image
-//        Drawable testImage = Resources.getSystem().getDrawable(imageID);
         image.setImageResource(imageID);
+
+        // get colors and set background?
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imageID);
+        if (bitmap != null && !bitmap.isRecycled()) {
+            Palette.from(bitmap).generate(paletteListener);
+        }
 
         // find 3 other random names
         ArrayList<Integer> list = new ArrayList<Integer>(); // get 3 indices that are unique and NOT index
@@ -176,7 +205,7 @@ public class GameScreenActivity extends AppCompatActivity {
         // correct name
         timer.cancel();
         score++;
-        scoreText.setText(Integer.toString(score + 1));
+        scoreText.setText(Integer.toString(score));
         playRound();
     }
 
@@ -186,7 +215,7 @@ public class GameScreenActivity extends AppCompatActivity {
         playRound();
         String message;
         if (ranOutOfTime) {
-            message = "Out of time!";
+            message = "Out of time! That was " + name + "!";
         } else {
             message = "That was " + name + "!";
         }
