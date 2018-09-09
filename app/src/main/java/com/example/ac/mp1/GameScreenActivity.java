@@ -64,10 +64,6 @@ public class GameScreenActivity extends AppCompatActivity {
                 intent.putExtra(ContactsContract.Intents.Insert.NAME, correctName);
                 startActivity(intent);
 
-                // visual:
-
-                // palette
-
             }
         });
 
@@ -222,13 +218,7 @@ public class GameScreenActivity extends AppCompatActivity {
         Toast.makeText(this, message,
                 Toast.LENGTH_SHORT).show();
     }
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        timer.cancel();
-//    }
-//
+    
     @Override
     protected void onResume() {
         super.onResume();
